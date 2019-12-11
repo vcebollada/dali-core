@@ -1,6 +1,3 @@
-#ifndef DALI_DEMANGLER_H
-#define DALI_DEMANGLER_H
-
 /*
  * Copyright (c) 2019 Samsung Electronics Co., Ltd.
  *
@@ -18,24 +15,42 @@
  *
  */
 
+// INTERNAL INCLUDE
+#include <dali/integration-api/debug.h>
+
 // EXTERNAL INCLUDES
-#include <string>
+#include <stdint.h>
+#include <time.h>
+
+#if defined(DEBUG_ENABLED)
+
+namespace
+{
+const uint64_t NANOSECONDS_PER_SECOND = 1e+9;
+}
 
 namespace Dali
 {
 
-namespace Internal
+namespace Integration
 {
 
-/**
- * @brief Demangle a nested typeid name to its class name.
- * @param[in] typeIdName The type id name string to demangle.
- * @returns the class name ie "Actor" or an empty string
- */
-const std::string DemangleClassName(const char *typeIdName);
+namespace Log
+{
 
-} // namespace Internal
+void GetNanoseconds( uint64_t& timeInNanoseconds )
+{
+  timespec timeSpec;
+  clock_gettime( CLOCK_MONOTONIC, &timeSpec );
+
+  // Convert all values to uint64_t to match our return type
+  timeInNanoseconds = ( static_cast< uint64_t >( timeSpec.tv_sec ) * NANOSECONDS_PER_SECOND ) + static_cast< uint64_t >( timeSpec.tv_nsec );
+}
+
+} // namespace Debug
+
+} // namespace Integration
 
 } // namespace Dali
 
-#endif // DALI_DEMANGLER_H
+#endif // DEBUG_ENABLED

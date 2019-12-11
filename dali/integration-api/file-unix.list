@@ -1,0 +1,11 @@
+# Set the source directory
+SET( platform_abstraction_src_dir ${ROOT_SRC_DIR}/dali/integration-api )
+
+# Add internal unix source files here
+SET( platform_abstraction_src_unix_source
+  ${platform_abstraction_src_dir}/debug-unix.cpp
+)
+
+SET( SOURCES ${SOURCES}
+  ${platform_abstraction_src_unix_source}
+)

@@ -13,6 +13,7 @@
          * [NON-SMACK Targets](#non-smack-targets)
          * [SMACK enabled Targets](#smack-enabled-targets)
          * [DEBUG Builds](#debug-builds)
+      * [3. Building for MS-Windows]
 
 # Build Instructions
 
@@ -91,3 +92,10 @@ See the README.md in dali-core/automated-tests.
 
          $ gbs build -A [TARGET_ARCH] --define "%enable_debug 1"
 
+## 3. Building for MS-Windows.
+
+### Requirements
+  - vcpkg (https://github.com/dalihub/vcpkg)
+
+* Install vcpkg TODO ...
+   

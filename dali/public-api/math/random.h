@@ -21,6 +21,9 @@
 // INTERNAL INCLUDES
 #include <dali/public-api/math/vector4.h>
 
+// EXTERNAL INCLUDES
+#include <ctime>
+
 namespace Dali
 {
 /**

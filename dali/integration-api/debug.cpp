@@ -25,7 +25,6 @@
 #include <cstdlib>
 #include <sstream>
 #include <iomanip>
-#include <ctime>
 
 // INTERNAL INCLUDES
 #include <dali/public-api/common/constants.h>
@@ -47,21 +46,13 @@ Dali::DebugPropertyValueMap   gValueMap;
 
 #endif
 
-
-namespace // unnamed namespace
-{
-
-const uint64_t NANOSECONDS_PER_SECOND = 1e+9;
-
-}
-
 namespace Integration
 {
 
 namespace Log
 {
 
-thread_local LogFunction gthreadLocalLogFunction = NULL;
+thread_local LogFunction gthreadLocalLogFunction = nullptr;
 
 /* Forward declarations */
 std::string FormatToString(const char *format, ...);
@@ -92,7 +83,7 @@ void InstallLogFunction(const LogFunction& logFunction)
 
 void UninstallLogFunction()
 {
-  gthreadLocalLogFunction = NULL;
+  gthreadLocalLogFunction = nullptr;
 }
 
 #ifdef DEBUG_ENABLED
@@ -101,11 +92,11 @@ void UninstallLogFunction()
 Filter* Filter::gRender     = Filter::New(Debug::Concise, false, "LOG_RENDER");
 Filter* Filter::gResource   = Filter::New(Debug::Concise, false, "LOG_RESOURCE");
 Filter* Filter::gGLResource = Filter::New(Debug::Concise, false, "LOG_GL_RESOURCE");
-Filter* Filter::gObject     = NULL;
+Filter* Filter::gObject     = nullptr;
 Filter* Filter::gImage      = Filter::New(Debug::Concise, false, "LOG_IMAGE");
 Filter* Filter::gModel      = Filter::New(Debug::Concise, false, "LOG_MODEL");
-Filter* Filter::gNode       = NULL;
-Filter* Filter::gElement    = NULL;
+Filter* Filter::gNode       = nullptr;
+Filter* Filter::gElement    = nullptr;
 Filter* Filter::gActor      = Filter::New(Debug::Concise, false, "LOG_ACTOR");
 Filter* Filter::gShader     = Filter::New(Debug::Concise, false, "LOG_SHADER");
 
@@ -179,7 +170,7 @@ void Filter::Log(LogLevel level, const char* format, ...)
 
     if( mTraceEnabled )
     {
-      char *buffer = NULL;
+      char *buffer = nullptr;
       int numChars = asprintf( &buffer, "    %-*c %s", mNesting, ':', format );
       if( numChars >= 0 ) // No error
       {
@@ -224,8 +215,16 @@ TraceObj::~TraceObj()
   }
 }
 
-#endif // DEBUG_ENABLED
+void GetNanoseconds( uint64_t& timeInNanoseconds )
+{
+  timespec timeSpec;
+  clock_gettime( CLOCK_MONOTONIC, &timeSpec );
 
+  // Convert all values to uint64_t to match our return type
+  timeInNanoseconds = ( static_cast< uint64_t >( timeSpec.tv_sec ) * NANOSECONDS_PER_SECOND ) + static_cast< uint64_t >( timeSpec.tv_nsec );
+}
+
+#endif // DEBUG_ENABLED
 
 std::string ArgListToString(const char *format, va_list args)
 {
@@ -250,15 +249,6 @@ std::string FormatToString(const char *format, ...)
   std::string s = ArgListToString(format, arg);
   va_end(arg);
   return s;
-}
-
-void GetNanoseconds( uint64_t& timeInNanoseconds )
-{
-  timespec timeSpec;
-  clock_gettime( CLOCK_MONOTONIC, &timeSpec );
-
-  // Convert all values to uint64_t to match our return type
-  timeInNanoseconds = ( static_cast< uint64_t >( timeSpec.tv_sec ) * NANOSECONDS_PER_SECOND ) + static_cast< uint64_t >( timeSpec.tv_nsec );
 }
 
 } // namespace Log
